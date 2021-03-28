@@ -11,7 +11,7 @@ const Cart = (props) => {
     let totalPrice =0;
     for (let i = 0; i < cart.length; i++) {
         const product = cart[i];
-        totalPrice = Math.round(totalPrice + product.price * product.quantity);
+        totalPrice = Math.round(totalPrice + product.price * product.quantity || 1);
         // debugger;
     }
 

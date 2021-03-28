@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import fakeData from '../../fakeData';
+// import fakeData from '../../fakeData';
 import { getDatabaseCart, processOrder, removeFromDatabaseCart, } from '../../utilities/databaseManager';
 import Cart from '../Cart/Cart';
 import ReviewItem from '../ReviewItem/ReviewItem';
@@ -11,7 +11,7 @@ const Review = () => {
     const [orderPlaced, setOrderPlaced] = useState(false);
     const history = useHistory()
     const handleProceedCheckout = () => {
-      history.push('./shipment');
+        history.push('./shipment');
     }
 
     const removeItem = (productKey) => {
@@ -24,18 +24,27 @@ const Review = () => {
         const savedCart = getDatabaseCart()
         // console.log(savedCart);
         const productKeys = Object.keys(savedCart)
+        fetch('https://shrouded-springs-51928.herokuapp.com/productsByKeys', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(productKeys)
+        })
+        .then(res => res.json())
+        .then(data => setCart(data))
         // console.log(productKeys);
         // const count = productKeys.map(key => savedCart[key])
         // console.log(count);
-        const cartProducts = productKeys.map(key => {
+        // const cartProducts = productKeys.map(key => {
 
-            const product = fakeData.find(pd => pd.key === key);
-            product.quantity = savedCart[key];
-            return product;
+        //     const product = fakeData.find(pd => pd.key === key);
+        //     product.quantity = savedCart[key];
+        //     return product;
 
-        });
+        // });
 
-        setCart(cartProducts);
+        // setCart(cartProducts);
     }, [])
     let thankYou;
     if (orderPlaced) {
@@ -49,7 +58,7 @@ const Review = () => {
                     cart.map(pd => <ReviewItem product={pd} key={pd.key} removeItem={removeItem}></ReviewItem>)
                 }
                 {
-                   thankYou
+                    thankYou
                 }
             </div>
 
